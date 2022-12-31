@@ -23,35 +23,65 @@ $form = New-Object System.Windows.Forms.Form
 $form.Width = 700
 $form.Height = 600
 
-$richText = New-Object System.Windows.Forms.RichTextBox
-$richText.Location = [System.Drawing.Point]::new(10,10)
-$richText.Size = [System.Drawing.Size]::new(364,350)
-$richText.Font = [System.Drawing.Font]::new('Calibri', 14)
-$richText.Anchor = 'Top','Right','Bottom','Left'
-$form.Controls.Add($richText)
+$TabControl = New-Object System.Windows.Forms.TabControl
+$TabPage1 = New-Object System.Windows.Forms.TabPage
+$TabPage1.Text = 'Тестирование'
 
-$button = New-Object System.Windows.Forms.Button
-$button.Location = [System.Drawing.Point]::new(10,400)
-$button.Size = [System.Drawing.Size]::new(80,30)
-$button.Text = 'Test'
-$button.Anchor = 'Bottom','Left'
-$button.Add_Click({
+$Tab1_Label_ARM = New-Object System.Windows.Forms.Label
+$Tab1_Label_ARM.Text = "Введите имя АРМ:"
+$Tab1_Label_ARM.Location = New-Object System.Drawing.Point(5,10)
+$Tab1_Label_ARM.AutoSize = $true
+$TabPage1.Controls.Add($Tab1_Label_ARM)
+
+$Tab1_Edit_ARM = New-Object System.Windows.Forms.TextBox
+$Tab1_Edit_ARM.Location = New-Object System.Drawing.Point(108,7)
+$Tab1_Edit_ARM.Size = New-Object System.Drawing.Size(150,70)
+$TabPage1.Controls.Add($Tab1_Edit_ARM)
+
+$Tab1_Button_Test = New-Object System.Windows.Forms.Button
+$Tab1_Button_Test.Location = New-Object System.Drawing.Point(263,7)
+$Tab1_Button_Test.Size = New-Object System.Drawing.Size(90,20)
+$Tab1_Button_Test.Text = 'Проверить'
+#$button.Anchor = 'Bottom','Left'
+$TabPage1.Controls.Add($Tab1_Button_Test)
+
+$Tab1_Button_Test.Add_Click({
     $richText.Clear()
     # write green lines
     Append-ColoredLine $richText Green "GPO: 'gpo_A' has been linked Successfully"
     Append-ColoredLine $richText Green "GPO: 'gpo_B' has been linked Successfully"
     # write red line
     Append-ColoredLine $richText Red "Could not link GPO: 'gpo_C'"
-
     # insert blank line
     $richText.AppendText([Environment]::NewLine)
-
     # write various lines in different colors
     'Blue','DarkGoldenrod','DarkCyan','OliveDrab','Chocolate','Crimson' | ForEach-Object {
         Append-ColoredLine $richText $_ "Some text using color '$_'" 
     }
 })
-$form.Controls.Add($button)
+
+
+
+$TabPage2 = New-Object System.Windows.Forms.TabPage
+$TabPage2.Text = 'Установка'
+
+
+$TabControl.Controls.Add($TabPage1)
+$TabControl.Controls.Add($TabPage2)
+$TabControl.Location  = New-Object System.Drawing.Point(0,0)
+$TabControl.Size = New-Object System.Drawing.Size(683,360)
+
+$form.Controls.add($TabControl)
+
+
+
+$richText = New-Object System.Windows.Forms.RichTextBox
+$richText.Location = New-Object System.Drawing.Point(1,362)
+$richText.Size = New-Object System.Drawing.Size(679,196)
+$richText.Font = [System.Drawing.Font]::new('Calibri', 12)
+$richText.Anchor = 'Top','Right','Bottom','Left'
+$form.Controls.Add($richText)
+Append-ColoredLine $richText Black "     ----- Лог выполнения команд -----"
 
 [void] $form.ShowDialog()
 $form.Dispose()
