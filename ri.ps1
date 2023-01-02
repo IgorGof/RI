@@ -46,14 +46,24 @@ $Tab1_Button_Test.Text = 'Проверить'
 $TabPage1.Controls.Add($Tab1_Button_Test)
 
 $Tab1_Button_Test.Add_Click({
-    $richText.Clear()
+    #$RichText.Clear()
+    $First_Char = $Tab1_Edit_ARM.Text[0]
+    if ($First_Char -match '\d.\d.\d.\d') {
+        Append-ColoredLine $richText Black "Введен IP адрес"
+    } else {
+        Append-ColoredLine $richText Black "Введено имя АРМ"
+        Append-ColoredLine $richText Black $Tab1_Edit_ARM.Text
+        $IP = Resolve-DnsName -Name $Tab1_Edit_ARM.Text -Type A
+        $IP_String = "IP адрес - " + [string]$IP.IPAddress
+        Append-ColoredLine $richText Black $IP_String
+    }
     # write green lines
-    Append-ColoredLine $richText Green "GPO: 'gpo_A' has been linked Successfully"
-    Append-ColoredLine $richText Green "GPO: 'gpo_B' has been linked Successfully"
+    #Append-ColoredLine $richText Green $First_Char
+    #Append-ColoredLine $richText Green "GPO: 'gpo_B' has been linked Successfully"
     # write red line
-    Append-ColoredLine $richText Red "Could not link GPO: 'gpo_C'"
+    #Append-ColoredLine $richText Red "Could not link GPO: 'gpo_C'"
     # insert blank line
-    $richText.AppendText([Environment]::NewLine)
+    #$richText.AppendText([Environment]::NewLine)
     # write various lines in different colors
     'Blue','DarkGoldenrod','DarkCyan','OliveDrab','Chocolate','Crimson' | ForEach-Object {
         Append-ColoredLine $richText $_ "Some text using color '$_'" 
